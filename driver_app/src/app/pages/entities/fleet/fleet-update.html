@@ -1,0 +1,149 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-buttons slot="start" routerLink="/tabs/home">
+      <ion-icon name="arrow-back-outline" class="back"></ion-icon>
+    </ion-buttons>
+    <ion-title class="title">Fleet</ion-title>
+    <ion-buttons slot="end" *ngIf="isNew">
+      <ion-button [disabled]="!isReadyToSave" (click)="save()" color="primary" class="ion-padding" expand="block" fill="outline">
+        <span *ngIf="platform.is('ios')">{{'DONE_BUTTON' | translate}}</span>
+        Submit
+      </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="ion-padding">
+  <div class="screen__background_back">
+    <span class="screen__background__shape screen__background__shape4_back"></span>
+    <span class="screen__background__shape screen__background__shape3"></span>
+    <span class="screen__background__shape screen__background__shape2"></span>
+    <span class="screen__background__shape screen__background__shape1"></span>
+  </div>
+  <form *ngIf="form" name="form" [formGroup]="form" (ngSubmit)="save()">
+    &nbsp;
+    <ion-item [hidden]="!form.id">
+      <ion-label>ID</ion-label>
+      <ion-input type="hidden" id="id" formControlName="id" readonly></ion-input>
+    </ion-item>
+    <div *ngIf="isNew">
+    <ion-item fill="outline">
+      <ion-label position="floating">Driver Name</ion-label>
+      <ion-input type="text" name="driver_name" formControlName="driver_name"></ion-input>
+    </ion-item>
+    &nbsp;
+    <ion-item fill="outline">
+      <ion-input type="text" name="driver_email" placeholder="{{this.disabled_driver_email}}" disabled></ion-input>
+    </ion-item>
+    &nbsp;
+    <ion-item fill="outline">
+      <ion-label position="floating">Driver Address</ion-label>
+      <ion-input type="text" name="driver_address" formControlName="driver_address"></ion-input>
+    </ion-item>
+    &nbsp;
+    <ion-item fill="outline">
+      <ion-label position="floating">Driver Phone No</ion-label>
+      <ion-input type="text" name="driver_phone_no" formControlName="driver_phone_no"></ion-input>
+    </ion-item>
+    &nbsp;
+    <ion-item fill="outline">
+      <ion-label position="floating">Vehicle Plate No</ion-label>
+      <ion-input type="text" name="vehicle_plate_no" formControlName="vehicle_plate_no"></ion-input>
+    </ion-item>
+    &nbsp;
+    <ion-item fill="outline">
+      <ion-label position="floating">Vehicle Type</ion-label>
+      <ion-select
+        name="vehicle_type"
+        formControlName="vehicle_type"
+        placeholder="Select Vehicle Type"
+        [interfaceOptions]="customAlertOptions"
+        interface="alert"
+      >
+        <ion-select-option value="None">None</ion-select-option>
+        <ion-select-option value="Cycle">Cycle</ion-select-option>
+        <ion-select-option value="Scooter">Scooter</ion-select-option>
+        <ion-select-option value="Bike">Bike</ion-select-option>
+        <ion-select-option value="Rickshaw">Rickshaw</ion-select-option>
+        <ion-select-option value="Car">Car</ion-select-option>
+        <ion-select-option value="Tempo">Tempo</ion-select-option>
+        <ion-select-option value="Truck">Truck</ion-select-option>
+      </ion-select>
+    </ion-item>
+  </div>
+  <div *ngIf="!isNew">
+    <ion-card>
+    <ion-grid>
+      <ion-row>
+        <ion-col>Vehicle Plate No : {{fleet.vehicle_plate_no}}</ion-col>
+      </ion-row>
+      <ion-row>
+        <ion-col>Vehicle Type</ion-col>
+        <ion-col>{{fleet.vehicle_type}}</ion-col>
+      </ion-row>
+      <ion-row>
+        <ion-col>Status</ion-col>
+        <ion-col>{{fleet.vehicle_status}}</ion-col>
+      </ion-row>
+      <ion-row>
+        <ion-col>
+          <ion-text id="receiver_pop-button">Driver Details</ion-text>
+          <!-- <ion-popover trigger="pop-button" size="cover">
+            <ng-template>
+              <ion-content class="ion-padding">Hello!</ion-content>
+            </ng-template>
+          </ion-popover> -->
+          <ion-popover trigger="receiver_pop-button" side="bottom" alignment="center">
+            <ng-template>
+              <ion-content class="ion-padding custom__text">
+                Driver Name : {{fleet.driver_name}}<br /><br />
+                Driver Email : {{fleet.driver_email}}<br /><br />
+                Driver Address : {{fleet.driver_address}}<br /><br />
+                Driver Phone No : {{fleet.driver_phone_no}}
+              </ion-content>
+            </ng-template>
+          </ion-popover>
+        </ion-col>
+      </ion-row>
+    </ion-grid>
+  </ion-card>
+ 
+  &nbsp;
+  <ion-buttons>
+    <div *ngIf="fleet.vehicle_status=='Free'||fleet.vehicle_status=='Occupied'">
+    <ion-button [disabled]="!isReadyToSave" (click)="accident()" color="danger" class="ion-padding" expand="block" fill="outline">
+      <span *ngIf="platform.is('ios')">{{'DONE_BUTTON' | translate}}</span>
+      Change Status to<br>'Accident'
+    </ion-button>
+    <br>
+    <ion-button [disabled]="!isReadyToSave" (click)="repair()" color="warning" class="ion-padding" expand="block" fill="outline">
+      <span *ngIf="platform.is('ios')">{{'DONE_BUTTON' | translate}}</span>
+      Change Status to<br>'Repairs'
+    </ion-button>
+    </div>
+    <div *ngIf="fleet.vehicle_status=='Accident'">
+      <ion-button [disabled]="!isReadyToSave" (click)="repair()" color="warning" class="ion-padding" expand="block" fill="outline">
+        <span *ngIf="platform.is('ios')">{{'DONE_BUTTON' | translate}}</span>
+        Change Status to<br>'Repairs'
+      </ion-button>
+      <br>
+      <ion-button [disabled]="!isReadyToSave" (click)="free()" color="success" class="ion-padding" expand="block" fill="outline">
+        <span *ngIf="platform.is('ios')">{{'DONE_BUTTON' | translate}}</span>
+        Change Status to<br>'Free'
+      </ion-button>
+    </div>
+    <div *ngIf="fleet.vehicle_status=='Repairs'">
+      <ion-button [disabled]="!isReadyToSave" (click)="free()" color="success" class="ion-padding" expand="block" fill="outline">
+        <span *ngIf="platform.is('ios')">{{'DONE_BUTTON' | translate}}</span>
+        Change Status to<br>'Free'
+      </ion-button>
+      <br>
+      <ion-button [disabled]="!isReadyToSave" (click)="accident()" color="danger" class="ion-padding" expand="block" fill="outline">
+        <span *ngIf="platform.is('ios')">{{'DONE_BUTTON' | translate}}</span>
+        Change Status to<br>'Accident'
+      </ion-button>
+    </div>
+  </ion-buttons>
+  </div>
+  </form>
+</ion-content>

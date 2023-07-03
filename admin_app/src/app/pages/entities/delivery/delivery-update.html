@@ -1,0 +1,51 @@
+<ion-header [translucent]="true">
+  <ion-toolbar class="ion-padding">
+    <ion-buttons slot="start" routerLink="/tabs/delivery/{{delivery.id}}/view">
+      <ion-icon name="arrow-back-outline" class="back"></ion-icon>
+    </ion-buttons>
+    <ion-title class="title">Assign</ion-title>
+    <ion-buttons slot="end">
+      <ion-button [disabled]="!isReadyToSave" (click)="save()" color="primary" class="ion-padding" expand="block" fill="outline">
+        <span *ngIf="platform.is('ios')">{{'DONE_BUTTON' | translate}}</span>
+        Submit
+      </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="ion-padding">
+  <div class="screen__background_back">
+    <span class="screen__background__shape screen__background__shape4_back"></span>
+    <span class="screen__background__shape screen__background__shape3"></span>
+    <span class="screen__background__shape screen__background__shape2"></span>
+    <span class="screen__background__shape screen__background__shape1"></span>
+  </div>
+  <form *ngIf="form" name="form" [formGroup]="form" (ngSubmit)="save()">
+      <ion-item [hidden]="!form.id">
+        <ion-label>ID</ion-label>
+        <ion-input type="hidden" id="id" formControlName="id" readonly></ion-input>
+      </ion-item>
+      &nbsp;
+      <ion-item fill="outline">
+        <ion-input type="text" name="parcel_id" placeholder="{{delivery.parcel_id}}" disabled></ion-input>
+      </ion-item>
+      &nbsp;
+      <ion-item fill="outline">
+        <ion-label position="floating">Driver Id</ion-label>
+        <ion-select
+          name="driver_id"
+          formControlName="driver_id"
+          placeholder="Select Free Driver ID"
+          [interfaceOptions]="customAlertOptions"
+          interface="alert"
+        >
+        <ion-select-option *ngFor="let fid of flearr" [value]="fid">{{ fid }}</ion-select-option>
+        </ion-select>
+      </ion-item>
+      &nbsp;
+      <ion-item>
+        <ion-label position="floating">Estimated Time</ion-label>
+        <ion-datetime displayFormat="MM/DD/YYYY HH:mm" formControlName="estimated_time" id="field_estimated_time"></ion-datetime>
+      </ion-item>
+  </form>
+</ion-content>

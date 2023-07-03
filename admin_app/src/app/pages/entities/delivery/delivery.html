@@ -1,0 +1,136 @@
+<ion-header>
+  <ion-toolbar class="ion-padding">
+    <ion-buttons slot="start" routerLink="/tabs/home">
+      <ion-icon name="arrow-back-outline" class="back"></ion-icon>
+    </ion-buttons>
+    <ion-title class="title">Deliveries</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<!-- todo: add elasticsearch support -->
+<ion-content class="ion-padding">
+  <ion-refresher [disabled]="plt.is('desktop')" slot="fixed" (ionRefresh)="loadAll($event)">
+    <ion-refresher-content></ion-refresher-content>
+  </ion-refresher>
+
+  <div class="screen__background_back">
+    <span class="screen__background__shape screen__background__shape4_back"></span>
+    <span class="screen__background__shape screen__background__shape3"></span>
+    <span class="screen__background__shape screen__background__shape2"></span>
+    <span class="screen__background__shape screen__background__shape1"></span>
+  </div>
+
+  <ion-button (click)="historyview(0)">New Delivery</ion-button>
+  <ion-button (click)="historyview(2)">Past Deliveries</ion-button><br><br>
+  <ion-button (click)="historyview(1)">Assigned Deliveries</ion-button>
+
+  <div *ngIf="parcel_history == 0">
+    <br />
+    <ion-label>New Deliveries List</ion-label>
+    <ion-card *ngFor="let delivery of deliveries; trackBy: trackId">
+      <!-- Check parcel-detail.html for comments -->
+      <ion-grid (click)="view(delivery)" *ngIf="!delivery.driver_id">
+        <ion-row>
+          <ion-col><div id="sentparcelid">ID :{{delivery.id}}</div></ion-col>
+        </ion-row>
+        <ion-row>
+          <ion-col>Parcel ID</ion-col>
+          <ion-col>{{delivery.parcel_id}}</ion-col>
+        </ion-row>
+        <ion-row>
+          <ion-col>Driver ID</ion-col>
+          <ion-col>{{delivery.driver_id}}</ion-col>
+        </ion-row>
+        <ion-row>
+          <ion-col>Request Time</ion-col>
+          <ion-col>{{delivery.request_time | date:'medium'}}</ion-col>
+        </ion-row>
+        <ion-row>
+          <ion-col>Estimated Time</ion-col>
+          <ion-col>{{delivery.estimated_time | date:'medium'}}</ion-col>
+        </ion-row>
+      </ion-grid>
+    </ion-card>
+    <div class="ion-text-center" *ngIf="!deliveries?.length || sent_parcel_count">
+      <ion-label> No New Deliveries found. </ion-label>
+    </div>
+  </div>
+  <div *ngIf="parcel_history == 1">
+    <br />
+    <ion-label>Assigned Deliveries History</ion-label>
+    <ion-card *ngFor="let delivery of deliveries; trackBy: trackId">
+      <!-- Check parcel-detail.html for comments -->
+      <ion-grid (click)="view(delivery)" *ngIf="delivery.driver_id && !delivery.ended_time">
+        <ion-row>
+          <ion-col><div id="receivedparcelid">ID :{{delivery.id}}</div></ion-col>
+        </ion-row>
+        <ion-row>
+          <ion-col>Parcel ID</ion-col>
+          <ion-col>{{delivery.parcel_id}}</ion-col>
+        </ion-row>
+        <ion-row>
+          <ion-col>Driver ID</ion-col>
+          <ion-col>{{delivery.driver_id}}</ion-col>
+        </ion-row>
+        <ion-row>
+          <ion-col>Request Time</ion-col>
+          <ion-col>{{delivery.request_time | date:'medium'}}</ion-col>
+        </ion-row>
+        <ion-row>
+          <ion-col>Assigned Time</ion-col>
+          <ion-col>{{delivery.assigned_time | date:'medium'}}</ion-col>
+        </ion-row>
+        <ion-row>
+          <ion-col>Estimated Time</ion-col>
+          <ion-col>{{delivery.estimated_time | date:'medium'}}</ion-col>
+        </ion-row>
+      </ion-grid>
+    </ion-card>
+    <div class="ion-text-center" *ngIf="!deliveries?.length || received_parcel_count">
+      <ion-label> No Assigned Deliveries found. </ion-label>
+    </div>
+  </div>
+  <div *ngIf="parcel_history == 2">
+    <br />
+    <ion-label>Past Deliveries History</ion-label>
+    <ion-card *ngFor="let delivery of deliveries; trackBy: trackId">
+      <!-- Check parcel-detail.html for comments -->
+      <ion-grid (click)="view(delivery)" *ngIf="delivery.driver_id && delivery.ended_time">
+        <ion-row>
+          <ion-col><div id="pastparcelid">ID :{{delivery.id}}</div></ion-col>
+        </ion-row>
+        <ion-row>
+          <ion-col>Parcel ID</ion-col>
+          <ion-col>{{delivery.parcel_id}}</ion-col>
+        </ion-row>
+        <ion-row>
+          <ion-col>Driver ID</ion-col>
+          <ion-col>{{delivery.driver_id}}</ion-col>
+        </ion-row>
+        <ion-row>
+          <ion-col>Request Time</ion-col>
+          <ion-col>{{delivery.request_time | date:'medium'}}</ion-col>
+        </ion-row>
+        <ion-row>
+          <ion-col>Assigned Time</ion-col>
+          <ion-col>{{delivery.assigned_time | date:'medium'}}</ion-col>
+        </ion-row>
+        <ion-row>
+          <ion-col>Estimated Time</ion-col>
+          <ion-col>{{delivery.estimated_time | date:'medium'}}</ion-col>
+        </ion-row>
+        <ion-row>
+          <ion-col>Ended Time</ion-col>
+          <ion-col>{{delivery.ended_time | date:'medium'}}</ion-col>
+        </ion-row>
+        <ion-row>
+          <ion-col>Star Received</ion-col>
+          <ion-col>{{delivery.star_received}}</ion-col>
+        </ion-row>
+      </ion-grid>
+    </ion-card>
+    <div class="ion-text-center" *ngIf="!deliveries?.length || past_parcel_count">
+      <ion-label> No Past Deliveries found. </ion-label>
+    </div>
+  </div>
+</ion-content>

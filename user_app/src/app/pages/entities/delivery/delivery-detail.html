@@ -1,0 +1,69 @@
+<ion-header [translucent]="true">
+  <ion-toolbar class="ion-padding">
+    <ion-buttons slot="start" routerLink="/tabs/delivery">
+      <ion-icon name="arrow-back-outline" class="back"></ion-icon>
+    </ion-buttons>
+    <ion-title class="title">Delivery</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="ion-padding">
+  <div class="screen__background_back">
+    <span class="screen__background__shape screen__background__shape4_back"></span>
+    <span class="screen__background__shape screen__background__shape3"></span>
+    <span class="screen__background__shape screen__background__shape2"></span>
+    <span class="screen__background__shape screen__background__shape1"></span>
+  </div>
+
+  <ion-card>
+    <!-- <ion-card-header> -->
+    <!-- <ion-card-title>Parcel Name</ion-card-title>
+      &nbsp;
+      <ion-card-subtitle>SENDER'S UIN</ion-card-subtitle>
+      &nbsp;
+      <ion-card-subtitle>RECEIVER'S UIN</ion-card-subtitle>
+    </ion-card-header>
+
+    <ion-card-content>
+      
+    </ion-card-content> -->
+    <ion-grid>
+      <ion-row>
+        <ion-col>Delivery ID : {{delivery.id}}</ion-col>
+      </ion-row>
+      <ion-row>
+        <ion-col>Parcel ID</ion-col>
+        <ion-col>{{delivery.parcel_id}}</ion-col>
+      </ion-row>
+      <ion-row>
+        <ion-col>Driver ID</ion-col>
+        <ion-col>{{delivery.driver_id}}</ion-col>
+      </ion-row>
+      <ion-row>
+        <ion-col>Request Time</ion-col>
+        <ion-col>{{delivery.request_time | date:'medium'}}</ion-col>
+      </ion-row>
+      <ion-row>
+        <ion-col>Assigned Time</ion-col>
+        <ion-col>{{delivery.assigned_time | date:'medium'}}</ion-col>
+      </ion-row>
+      <ion-row>
+        <ion-col>Estimated Time</ion-col>
+        <ion-col>{{delivery.estimated_time | date:'medium'}}</ion-col>
+      </ion-row>
+      <ion-row>
+        <ion-col>Ended Time</ion-col>
+        <ion-col>{{delivery.ended_time | date:'medium'}}</ion-col>
+      </ion-row>
+      <ion-row>
+        <ion-col>Star Received</ion-col>
+        <ion-col>{{delivery.star_received}}</ion-col>
+      </ion-row>
+    </ion-grid>
+  </ion-card>
+<div *ngIf="!delivery.ended_time">
+  <ion-button expand="block" shape="round" fill="outline" color="primary" (click)="open(delivery)">{{ 'EDIT_BUTTON' | translate }}</ion-button>
+  &nbsp;
+  <ion-button expand="block" shape="round" fill="outline" color="danger" (click)="deleteModal(delivery)">{{ 'DELETE_BUTTON' | translate }}</ion-button>
+</div>
+</ion-content>
